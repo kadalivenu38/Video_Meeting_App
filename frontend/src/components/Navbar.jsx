@@ -9,7 +9,7 @@ const Navbar = () => {
   const userName = user?.fullName || user?.firstName || user?.primaryEmailAddress?.emailAddress?.split('@')[0] || "User";
 
   return (
-    <div className='w-full max-w-300 mx-auto bg-white/90 backdrop-blur xl:rounded-b-xl sticky top-0 z-40 px-6
+    <div className='w-full max-w-305 mx-auto bg-white/90 backdrop-blur xl:rounded-b-xl sticky top-0 z-40 px-6
       py-4 flex items-center justify-between border border-slate-200'>
       {/* Brand Logo & Navigation Links*/}
       <div className='flex items-center gap-2'>
