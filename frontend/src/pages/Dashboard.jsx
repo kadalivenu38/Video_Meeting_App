@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { ShieldCheckIcon, PlusIcon, KeyboardIcon, ArrowRightIcon } from 'lucide-react'
 import { dummyStats, dummyUser } from '../assets/asset';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const Dashboard = () => {
   const user = dummyUser;
@@ -18,9 +19,46 @@ const Dashboard = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const handleCreateMeeting = () => { }
+  const MEETING_ID_PATTERN = /^[a-z0-9]{4}(?:-[a-z0-9]{4}){2}$/;
 
-  const handleJoinMeeting = () => { }
+  const generateMeetingId = () => {
+    const randomValues = new Uint32Array(12);
+    crypto.getRandomValues(randomValues);
+
+    return Array.from(randomValues, (value) => (value % 36).toString(36))
+      .join('')
+      .match(/.{1,4}/g)
+      .join('-');
+  };
+
+  const handleCreateMeeting = () => {
+    if (isCreating) return;
+
+    setIsCreating(true);
+    try {
+      const newMeetingId = generateMeetingId();
+      setIsCreating(false);
+      toast.success("Meeting Created");
+      navigate(`/meeting/${newMeetingId}`);
+    } catch {
+      setIsCreating(false);
+      toast.error("Unable to create a meeting. Please try again.");
+    }
+  };
+
+  const handleJoinMeeting = (event) => {
+    event.preventDefault();
+
+    if (isCreating) return;
+
+    const meetingId = joinId.trim().toLowerCase();
+    if (!MEETING_ID_PATTERN.test(meetingId)) {
+      toast.error("Enter a valid meeting ID, such as a1b2-c3d4-e5f6.");
+      return;
+    }
+
+    navigate(`/meeting/${encodeURIComponent(meetingId)}`);
+  };
 
   return (
     <div className='flex-1 max-w-7xl w-full mx-auto p-6 md:p-12 flex flex-col justify-center'>
