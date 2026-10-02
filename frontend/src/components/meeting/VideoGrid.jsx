@@ -1,4 +1,4 @@
-import React from 'react'
+import VideoTile from './VideoTile.jsx'
 
 const VideoGrid = ({ localStream, localUser, remoteUsers, audioEnabled, videoEnabled }) => {
     const totalParticipants = remoteUsers.length + 1;
@@ -15,6 +15,19 @@ const VideoGrid = ({ localStream, localUser, remoteUsers, audioEnabled, videoEna
         <div className='flex-1 w-full flex items-center justify-center p-4 overflow-y-auto'>
             <div className={`w-full grid gap-4 ${getGridClass()} aspect-video max-h-[calc(100vh-140px)] transition-all duration-300`}>
                 {/* Local User Tile */}
+                <VideoTile stream={localStream} name={localUser?.name || "You"} isLocal={true} audioEnabled={audioEnabled} videoEnabled={videoEnabled} />
+
+                {/* Remote User Tiles */}
+                {remoteUsers.map((remote) => (
+                    <VideoTile
+                        key={remote.socketId}
+                        stream={remote.stream}
+                        name={remote.userName}
+                        isLocal={false}
+                        audioEnabled={remote.audioEnabled}
+                        videoEnabled={remote.videoEnabled}
+                    />
+                ))}
             </div>
         </div>
     )

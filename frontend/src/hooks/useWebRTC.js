@@ -14,7 +14,7 @@ const useWebRTC = (_roomId, user, onMeetingEnded, _enabled = true) => {
   const initLocalStream = useCallback(async () => {
     try {
       if (navigator?.mediaDevices?.getUserMedia) {
-        const stream = navigator.mediaDevices.getUserMedia({
+        const stream = await navigator.mediaDevices.getUserMedia({
           video: true,
           audio: true,
         });
@@ -31,7 +31,7 @@ const useWebRTC = (_roomId, user, onMeetingEnded, _enabled = true) => {
   useEffect(() => {
     initLocalStream();
     return () => {
-      if (localStreamRef.current) {
+      if (localStreamRef.current?.getTracks) {
         localStreamRef.current.getTracks().forEach((track) => track.stop());
       }
     };
@@ -69,7 +69,7 @@ const useWebRTC = (_roomId, user, onMeetingEnded, _enabled = true) => {
     }
   }, [onMeetingEnded]);
 
-  return (
+  return {
     localStream,
     remoteUsers,
     audioEnabled,
@@ -77,7 +77,7 @@ const useWebRTC = (_roomId, user, onMeetingEnded, _enabled = true) => {
     toggleAudio,
     toggleVideo,
     endMeeting
-  );
+  }
 };
 
 export default useWebRTC;
