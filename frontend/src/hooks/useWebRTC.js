@@ -47,7 +47,7 @@ const useWebRTC = (_roomId, user, onMeetingEnded, _enabled = true) => {
         audioTrack.enabled = newState;
       }
     }
-    toast(newState ? "Microphone turned on" : "Microphone muted");
+    toast(newState ? "Microphone Unmuted" : "Microphone muted");
   };
 
   const toggleVideo = () => {
