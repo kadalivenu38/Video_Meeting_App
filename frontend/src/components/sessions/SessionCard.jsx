@@ -1,0 +1,69 @@
+import { CalendarIcon, LucideUsers, MessageSquareIcon } from "lucide-react";
+
+const SessionCard = ({ session, onOpenDetails, onRejoin }) => {
+    const isEnded = session.status === "ended";
+    return (
+        <div className='bg-white/70 backdrop-blur rounded-3xl p-4 flex flex-col justify-between space-y-3 border border-slate-100/60
+        shadow-xs'>
+            <div className='space-y-3'>
+                <div className='flex items-center justify-between'>
+                    <span className='text-xs font-mono text-slate-500 font-medium bg-slate-500/5 px-2.5 py-1 rounded-md'>
+                        ID: {session.meetingId}
+                    </span>
+                    <span className={`text-xs font-medium px-2.5 py-1 rounded-full flex items-center gap-1.5 ${isEnded ?
+                        "bg-slate-500/5 text-slate-500" : "bg-emerald-500/5 text-emerald-500"}`}>
+                        <span className={`size-1.25 rounded-full ${isEnded ? "bg-slate-400" : "bg-emerald-500"}`} />
+                        {isEnded ? "Ended" : "Active"}
+                    </span>
+                </div>
+
+                <h3 className='text-lg font-medium text-slate-900 truncate'>
+                    {session.title || "Instant Meeting"}
+                </h3>
+                <p className="text-xs text-slate-400 flex items-center gap-1.5">
+                    <CalendarIcon className="size-4 text-slate-400" />
+                    {new Date(session.createdAt).toLocaleDateString(undefined, {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    })}
+                </p>
+            </div>
+
+            {/* Stats Row */}
+            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-300/30">
+                <div className="flex items-center gap-2 text-xs bg-slate-500/5 p-2.5 rounded-xl">
+                    <LucideUsers className="size-4 text-primary"/>
+                    <span>
+                        <strong className="font-semibold text-slate-900">{session.participants?.length || 0}</strong> Participants
+                    </span>
+                </div>
+
+                <div className="flex items-center gap-2 text-xs bg-slate-500/5 p-2.5 rounded-xl">
+                    <MessageSquareIcon className="size-4 text-primary" />
+                    <span>
+                        <strong className="font-semibold text-slate-900">{session.messages?.length || 0}</strong> Messages
+                    </span>
+                </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center justify-between gap-3 pt-2">
+                <button onClick={()=> onOpenDetails(session.id)} className="w-full bg-slate-400/10 hover:bg-slate-400/20 font-medium
+                text-slate-800 px-4 py-2 rounded-full text-sm cursor-pointer">
+                    View Details
+                </button>
+                {!isEnded && (
+                    <button onClick={()=> onRejoin(session.meetingId)} className="w-full bg-primary hover:bg-primary-hover text-white
+                    font-medium px-4 py-2 rounded-full text-sm shadow-xs cursor-pointer">
+                        Re-join
+                    </button>
+                )}
+            </div>
+        </div>
+    )
+}
+
+export default SessionCard

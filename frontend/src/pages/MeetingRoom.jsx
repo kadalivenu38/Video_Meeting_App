@@ -4,7 +4,10 @@ import { useCallback, useState } from 'react';
 import useWebRTC from '../hooks/useWebRTC.js';
 import VideoGrid from '../components/meeting/VideoGrid.jsx';
 import ChatPanel from '../components/meeting/ChatPanel.jsx';
+import ParticipantsList from '../components/meeting/ParticipantsList.jsx';
+import ControlBar from '../components/meeting/ControlBar.jsx'
 import { useChat } from '../hooks/useChat.js';
+import toast from 'react-hot-toast';
 
 const MeetingRoom = () => {
   const { meetingId } = useParams();
@@ -23,9 +26,16 @@ const MeetingRoom = () => {
   // Initialize Chat
   const { messages, sendMessage, unreadCnt, isChatOpen, toggleChat } = useChat(meetingId, userData);
 
-  const handleLeave = () => { }
+  const handleLeave = () => {
+    toast("You left the meeting");
+    navigate('/dashboard');
+  }
 
-  const handleEndMeeting = () => { }
+  const handleEndMeeting = () => {
+    endMeeting();
+    toast("Meeting ended for all participants");
+    navigate('/dashboard');
+  }
 
   return (
     <div className='h-screen w-screen bg-slate-100  text-slate-900 flex flex-col overflow-hidden relative font-sans'>
@@ -49,8 +59,15 @@ const MeetingRoom = () => {
         <ChatPanel isOpen={isChatOpen} onClose={toggleChat} messages={messages} onSendMessage={sendMessage} currentUser={userData} />
 
         {/* participants panel */}
-        {/* Bottom floating control bar */}
+        <ParticipantsList isOpen={isParticipantsOpen} onClose={() => setIsParticipantsOpen(false)} localUser={userData} localAudio={audioEnabled}
+          localVideo={videoEnabled} remoteUsers={remoteUsers} meetingHostId={dummyUser.id} />
       </div>
+
+      {/* Bottom floating control bar */}
+      <ControlBar roomId={meetingId || dummyMeetingDetails.meetingId} audioEnabled={audioEnabled} videoEnabled={videoEnabled}
+        onToggleAudio={toggleAudio} onToggleVideo={toggleVideo} onToggleChat={toggleChat} isChatOpen={isChatOpen} unreadCnt={unreadCnt}
+        onToggleParticipants={() => setIsParticipantsOpen((prev) => !prev)} isParticipantsOpen={isParticipantsOpen} isHost={isHost}
+        participantsCnt={remoteUsers.length + 1} onLeave={handleLeave} onEndMeeting={handleEndMeeting} />
     </div>
   )
 }
