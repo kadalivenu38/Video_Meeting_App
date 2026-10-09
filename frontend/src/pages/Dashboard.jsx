@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ShieldCheckIcon, PlusIcon, KeyboardIcon, ArrowRightIcon } from 'lucide-react'
-import { dummyStats, dummyUser } from '../assets/asset';
+import { dummyStats } from '../assets/asset';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useUser } from '@clerk/react';
@@ -8,7 +8,7 @@ import { useUser } from '@clerk/react';
 const Dashboard = () => {
   const { user } = useUser();
   const userName = user.fullName;
-  const userEmail = user.primaryEmailAddress.emailAddress;
+  const userEmail = user.primaryEmailAddress?.emailAddress ?? "";
   const navigate = useNavigate();
   const [isCreating, setIsCreating] = useState(false);
   const [currTime, setCurrTime] = useState(new Date());

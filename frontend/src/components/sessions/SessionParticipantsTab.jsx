@@ -1,4 +1,4 @@
-import { CrownIcon } from 'lucide-react';
+import { MessageSquareIcon, CrownIcon } from 'lucide-react';
 
 const SessionParticipantsTab = ({ participants = [], host }) => {
     if (participants.length === 0) {

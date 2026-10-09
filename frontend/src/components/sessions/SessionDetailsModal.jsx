@@ -4,11 +4,10 @@ import SessionChatTab from './SessionChatTab';
 import SessionParticipantsTab from './SessionParticipantsTab';
 
 const SessionDetailsModal = ({ session, onClose }) => {
-    if (!session) return null;
-
-    const isEnded = session.status === "Ended";
+    const isEnded = session.status === "ended";
     const [activeTab, setActiveTab] = useState("chat");
 
+    if (!session) return null;
     return (
         <div className='fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4'>
             <div className='bg-white rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-slate-100
